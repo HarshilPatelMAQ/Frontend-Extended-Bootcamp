@@ -120,7 +120,11 @@ public class ServiceRequestDetailViewModel
     public List<AttachmentViewModel> Attachments { get; set; } = new();
     public List<StatusHistoryViewModel> StatusHistory { get; set; } = new();
     public List<AssignmentHistoryViewModel> AssignmentHistory { get; set; } = new();
+    public string RequesterEmail { get; set; } = string.Empty;
+    public DateTime? FirstResponseDate { get; set; }
     public List<RequestStatus> ValidTransitions { get; set; } = new();
+    public List<RequestStatus> AllowedNextStatuses { get; set; } = new();
+    public List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> StaffList { get; set; } = new();
 
     // For forms
     public string? NewCommentBody { get; set; }
