@@ -46,6 +46,25 @@ tests/
 
 ---
 
+## 📊 Entity Relationship Diagram (ERD)
+
+Full documentation and table relationships are detailed in [`docs/er-diagram.md`](./docs/er-diagram.md).
+
+```mermaid
+erDiagram
+    ApplicationUser ||--o{ ServiceRequest : "submits / assigned"
+    SupportTeam ||--o{ Category : "owns"
+    Category ||--o{ ServiceRequest : "categorizes"
+    ServiceRequest ||--o{ RequestComment : "comments"
+    ServiceRequest ||--o{ RequestAttachment : "attachments"
+    ServiceRequest ||--o{ RequestStatusHistory : "status history"
+    ServiceRequest ||--o{ AssignmentHistory : "assignment history"
+    ServiceRequest ||--o{ Notification : "notifications"
+    SlaPolicy ||--o{ ServiceRequest : "SLA targets"
+```
+
+---
+
 ## 🛠️ Database Setup (SQL Server / SSMS)
 
 The application uses **Entity Framework Core** with **Microsoft SQL Server Express**.

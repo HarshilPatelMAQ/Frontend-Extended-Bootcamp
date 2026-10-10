@@ -1,0 +1,266 @@
+@model ServicePortal.Web.ViewModels.ServiceRequestDetailViewModel
+@using ServicePortal.Domain.Enums
+
+@{
+    ViewData["Title"] = $"Request Details - {Model.ReferenceNumber}";
+}
+
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="mb-4">
+        <a asp-action="Index" class="btn btn-link p-0 text-decoration-none text-muted mb-2">
+            <i class="bi bi-arrow-left me-1"></i> Back to Requests Dashboard
+        </a>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <span class="badge bg-primary fs-6 me-2">@Model.ReferenceNumber</span>
+                <h1 class="h3 d-inline font-weight-bold">@Model.Title</h1>
+            </div>
+            <div>
+                @switch (Model.Status)
+                {
+                    case RequestStatus.New:
+                        <span class="badge bg-primary px-3 py-2 fs-6">New</span>
+                        break;
+                    case RequestStatus.InProgress:
+                        <span class="badge bg-info text-dark px-3 py-2 fs-6">In Progress</span>
+                        break;
+                    case RequestStatus.WaitingForRequester:
+                        <span class="badge bg-warning text-dark px-3 py-2 fs-6">Waiting For Requester</span>
+                        break;
+                    case RequestStatus.Resolved:
+                        <span class="badge bg-success px-3 py-2 fs-6">Resolved</span>
+                        break;
+                    case RequestStatus.Closed:
+                        <span class="badge bg-dark px-3 py-2 fs-6">Closed</span>
+                        break;
+                    default:
+                        <span class="badge bg-secondary px-3 py-2 fs-6">Cancelled</span>
+                        break;
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row g-4">
+        <!-- Main Content (Ticket Info & Discussion) -->
+        <div class="col-lg-8">
+            <!-- Ticket Description -->
+            <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white py-3 font-weight-bold">
+                    <i class="bi bi-file-text me-2 text-primary"></i>Request Description
+                </div>
+                <div class="card-body">
+                    <p class="mb-0 text-dark style-whitespace-pre">@Model.Description</p>
+                </div>
+            </div>
+
+            <!-- Workflow Status Actions & Assignment (Staff Only) -->
+            @if (Model.IsStaff && Model.AllowedNextStatuses.Any())
+            {
+                <div class="card border-0 shadow-sm rounded-3 mb-4 bg-light">
+                    <div class="card-body p-3">
+                        <h6 class="font-weight-bold mb-3"><i class="bi bi-gear-fill me-2 text-primary"></i>Workflow & Action Controls</h6>
+                        
+                        <form asp-action="UpdateStatus" method="post" class="row g-2 align-items-center mb-3">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <div class="col-md-4">
+                                <select name="newStatus" class="form-select">
+                                    <option value="">-- Change Status --</option>
+                                    @foreach (var st in Model.AllowedNextStatuses)
+                                    {
+                                        <option value="@st">Transition to: @st</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" name="reason" class="form-control" placeholder="Reason / transition note..." />
+                            </div>
+                            <div class="col-md-3 d-grid">
+                                <button type="submit" class="btn btn-primary"><i class="bi bi-check2-circle me-1"></i> Update Status</button>
+                            </div>
+                        </form>
+
+                        <form asp-action="Assign" method="post" class="row g-2 align-items-center">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <div class="col-md-9">
+                                <select name="assigneeId" class="form-select" asp-items="Model.StaffList">
+                                    <option value="">-- Reassign Staff Member --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-grid">
+                                <button type="submit" class="btn btn-outline-dark"><i class="bi bi-person-plus-fill me-1"></i> Assign</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+
+            <!-- Comments Timeline -->
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-header bg-white py-3 font-weight-bold d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-chat-left-dots me-2 text-primary"></i>Activity & Discussion Thread</span>
+                    <span class="badge bg-secondary">@Model.Comments.Count Comments</span>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Post Comment Form -->
+                    <form asp-action="AddComment" method="post" class="mb-4">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <div class="mb-2">
+                            <textarea name="commentBody" class="form-control" rows="3" placeholder="Add a comment or update note..." required></textarea>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            @if (Model.IsStaff)
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="isInternal" value="true" id="isInternalCheck">
+                                    <label class="form-check-label text-muted small" for="isInternalCheck">
+                                        <i class="bi bi-lock-fill me-1"></i>Internal Note (Visible to staff only)
+                                    </label>
+                                </div>
+                            }
+                            else
+                            {
+                                <div></div>
+                            }
+                            <button type="submit" class="btn btn-primary btn-sm px-3"><i class="bi bi-send me-1"></i> Post Comment</button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4" />
+
+                    <!-- Comment List -->
+                    @if (!Model.Comments.Any())
+                    {
+                        <div class="text-center py-4 text-muted">
+                            <i class="bi bi-chat-square-dots fs-2 d-block mb-1"></i> No comments yet.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="timeline">
+                            @foreach (var comment in Model.Comments)
+                            {
+                                <div class="card mb-3 border-0 bg-light rounded-3">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="fw-bold"><i class="bi bi-person-circle me-1"></i>@comment.AuthorName</span>
+                                            <small class="text-muted">@comment.CreatedDate.ToString("yyyy-MM-dd HH:mm")</small>
+                                        </div>
+                                        <p class="mb-0 text-dark">@comment.Body</p>
+                                        @if (comment.IsInternal)
+                                        {
+                                            <small class="badge bg-warning text-dark mt-2"><i class="bi bi-eye-slash-fill me-1"></i>Internal Note</small>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Metadata -->
+        <div class="col-lg-4">
+            <!-- Ticket Info Card -->
+            <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-white py-3 font-weight-bold">
+                    <i class="bi bi-info-circle me-2 text-primary"></i>Request Information
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between py-3">
+                            <span class="text-muted">Category</span>
+                            <span class="fw-bold">@Model.CategoryName</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between py-3">
+                            <span class="text-muted">Priority</span>
+                            <span>
+                                @switch (Model.Priority)
+                                {
+                                    case RequestPriority.Critical:
+                                        <span class="badge bg-danger">Critical</span>
+                                        break;
+                                    case RequestPriority.High:
+                                        <span class="badge bg-warning text-dark">High</span>
+                                        break;
+                                    case RequestPriority.Medium:
+                                        <span class="badge bg-info text-dark">Medium</span>
+                                        break;
+                                    default:
+                                        <span class="badge bg-secondary">Low</span>
+                                        break;
+                                }
+                            </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between py-3">
+                            <span class="text-muted">Requester</span>
+                            <span class="fw-bold"><small>@Model.RequesterName</small></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between py-3">
+                            <span class="text-muted">Assignee</span>
+                            <span class="fw-bold text-primary"><small>@Model.AssigneeName</small></span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between py-3">
+                            <span class="text-muted">Contact Method</span>
+                            <span>@Model.PreferredContactMethod</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between py-3">
+                            <span class="text-muted">Created</span>
+                            <span class="small">@Model.CreatedDate.ToString("yyyy-MM-dd HH:mm")</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- SLA Deadlines Card -->
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-header bg-white py-3 font-weight-bold">
+                    <i class="bi bi-clock-history me-2 text-primary"></i>SLA Deadlines & Compliance
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-1">Response Due Date</small>
+                        <div class="fw-bold">
+                            @(Model.ResponseDueDate?.ToString("yyyy-MM-dd HH:mm") ?? "N/A")
+                        </div>
+                        @if (Model.IsResponseSlaBreached)
+                        {
+                            <span class="badge bg-danger mt-1"><i class="bi bi-exclamation-octagon me-1"></i>Response SLA Breached</span>
+                        }
+                    </div>
+
+                    <hr />
+
+                    <div>
+                        <small class="text-muted d-block mb-1">Resolution Due Date</small>
+                        <div class="fw-bold">
+                            @(Model.ResolutionDueDate?.ToString("yyyy-MM-dd HH:mm") ?? "N/A")
+                        </div>
+                        @if (Model.IsResolutionSlaBreached)
+                        {
+                            <span class="badge bg-danger mt-1"><i class="bi bi-exclamation-octagon me-1"></i>Resolution SLA Breached</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
