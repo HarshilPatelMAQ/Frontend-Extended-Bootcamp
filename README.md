@@ -2,7 +2,7 @@
 
 An enterprise-grade Service Management & Ticketing Portal built with **ASP.NET Core MVC 10**, **Entity Framework Core**, and **SQL Server**. The system implements Clean Architecture principles with role-based access control (RBAC), Service Level Agreement (SLA) calculation engines, automated background services, comprehensive audit logging, and responsive UI design.
 
-> 📘 **Detailed Guide**: A complete walkthrough of the business scenario, architecture layers, OOP/SOLID concepts, workflow rules, and DB schema is available in [`docs/project_explanation.md`](./docs/project_explanation.md).
+> **Detailed Guide**: A complete walkthrough of the business scenario, architecture layers, OOP/SOLID concepts, workflow rules, and DB schema is available in [`docs/project_explanation.md`](./docs/project_explanation.md).
 
 ---
 

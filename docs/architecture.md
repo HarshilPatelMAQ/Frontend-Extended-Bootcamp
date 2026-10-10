@@ -1,6 +1,6 @@
 # Architecture & Technical Documentation
 
-## 🏗️ Architectural Overview
+## Architectural Overview
 
 The **Smart Service Request Management Portal (SSRMP)** is built adhering to **Clean Architecture** (Onion/Hexagonal Architecture) principles. The codebase is organized into four decoupled projects to isolate business rules from infrastructure and presentation concerns:
 
@@ -17,7 +17,7 @@ tests/
 
 ---
 
-## 🔒 Security & Authorization Design
+## Security & Authorization Design
 
 1. **Role-Based Access Control (RBAC)**:
    - `Administrator`: Full access to configure support teams, SLA policies, manage users, and view audit logs.
@@ -37,7 +37,7 @@ tests/
 
 ---
 
-## ⚙️ SLA Calculation & Background Processing
+## SLA Calculation & Background Processing
 
 1. **SLA Business Hours Engine (`ISlaCalculationService`)**:
    - Calculates target due dates based on business hours (Mon-Fri, 09:00 - 18:00).

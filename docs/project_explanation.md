@@ -16,7 +16,7 @@ The SSRMP provides a centralized, role-based platform that enforces strict ticke
 
 ---
 
-## 🏗️ Architecture & Layer Breakdown
+## Architecture & Layer Breakdown
 
 The project follows **Clean Architecture** (Separation of Concerns):
 
@@ -42,7 +42,7 @@ docs/
    - Defines interfaces (`IWorkflowService`, `ISlaCalculationService`, `IEmailService`) so high-level logic depends on abstractions, not implementations (Dependency Inversion).
 
 2. **`ServicePortal.Application` (Business Logic Layer)**:
-   - **`WorkflowService`**: Implements state-machine rules validating valid transitions (`New` → `Assigned` → `InProgress` → `WaitingForRequester` → `Resolved` → `Closed`).
+   - **`WorkflowService`**: Implements state-machine rules validating valid transitions (`New` -> `Assigned` -> `InProgress` -> `WaitingForRequester` -> `Resolved` -> `Closed`).
    - **`SlaCalculationService`**: Calculates target SLA deadlines based on business hours (Mon-Fri 09:00 - 18:00), automatically skipping weekends.
 
 3. **`ServicePortal.Infrastructure` (Data & Identity Layer)**:
@@ -57,7 +57,7 @@ docs/
 
 ---
 
-## 🧠 Key Technical Concepts & Design Patterns
+## Key Technical Concepts & Design Patterns
 
 ### 1. Object-Oriented Programming (OOP) Concepts
 - **Inheritance**: `ApplicationUser : IdentityUser` extends built-in ASP.NET Core Identity with custom fields (`DisplayName`, `SupportTeamId`, `IsActive`).
@@ -74,7 +74,7 @@ docs/
 
 ---
 
-## 🔄 Ticket Lifecycle & Workflow Rules
+## Ticket Lifecycle & Workflow Rules
 
 ```mermaid
 stateDiagram-v2
@@ -91,7 +91,7 @@ stateDiagram-v2
 
 ---
 
-## 🔒 Security & Role-Based Access Control (RBAC)
+## Security & Role-Based Access Control (RBAC)
 
 | Role | Access Permissions |
 | :--- | :--- |
@@ -106,7 +106,7 @@ stateDiagram-v2
 
 ---
 
-## 📊 Database Setup & SSMS Integration
+## Database Setup & SSMS Integration
 
 The project is configured for **Microsoft SQL Server Express** (`localhost\SQLEXPRESS`).
 
@@ -115,11 +115,11 @@ The project is configured for **Microsoft SQL Server Express** (`localhost\SQLEX
    "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=ServicePortalDB;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true;"
    ```
 2. **EF Core Migrations**: Run `dotnet ef database update` to automatically create `ServicePortalDB` and seed initial data.
-3. **Standalone SQL Script**: [`ServicePortalDB_Setup.sql`](../ServicePortalDB_Setup.sql) is available in the workspace root for direct execution in **SQL Server Management Studio (SSMS)**.
+3. **Standalone SQL Script**: `ServicePortalDB_Setup.sql` is available in the workspace root for direct execution in **SQL Server Management Studio (SSMS)**.
 
 ---
 
-## 🧪 Testing & Quality Assurance
+## Testing & Quality Assurance
 
 - **Unit Tests (`tests/ServicePortal.UnitTests`)**: Automated xUnit tests covering `WorkflowService` transitions, `SlaCalculationService` business hours calculations, and validation rules.
 - **Integration Tests (`tests/ServicePortal.IntegrationTests`)**: Tests covering database operations and end-to-end workflows.
