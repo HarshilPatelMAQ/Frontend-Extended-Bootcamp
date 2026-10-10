@@ -11,17 +11,17 @@
     var primaryRole = roles.FirstOrDefault() ?? "User";
 
     <li class="nav-item me-2">
-        <span class="badge bg-primary text-white font-weight-bold px-2 py-1"><i class="bi bi-person-badge me-1"></i>@primaryRole</span>
+        <span class="badge bg-primary text-white font-weight-bold px-2 py-1">@primaryRole</span>
     </li>
     <li class="nav-item">
         <a class="nav-link text-white fw-medium me-2" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage Account">
-            <i class="bi bi-person-circle me-1 text-primary"></i>@(currentUser?.DisplayName ?? User.Identity?.Name)
+            @(currentUser?.DisplayName ?? User.Identity?.Name)
         </a>
     </li>
     <li class="nav-item">
         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button type="submit" class="btn btn-outline-light btn-sm px-3">
-                <i class="bi bi-box-arrow-right me-1"></i> Logout
+                Logout
             </button>
         </form>
     </li>
@@ -30,12 +30,12 @@ else
 {
     <li class="nav-item me-2">
         <a class="btn btn-outline-light btn-sm px-3" asp-area="Identity" asp-page="/Account/Login">
-            <i class="bi bi-box-arrow-in-right me-1"></i> Log In
+            Log In
         </a>
     </li>
     <li class="nav-item">
         <a class="btn btn-primary btn-sm px-3" asp-area="Identity" asp-page="/Account/Register">
-            <i class="bi bi-person-plus me-1"></i> Register
+            Register
         </a>
     </li>
 }

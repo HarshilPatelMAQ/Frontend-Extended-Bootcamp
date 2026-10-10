@@ -9,7 +9,7 @@
     <!-- Header -->
     <div class="mb-4">
         <a asp-action="Index" class="btn btn-link p-0 text-decoration-none text-muted mb-2">
-            <i class="bi bi-arrow-left me-1"></i> Back to Requests Dashboard
+            &larr; Back to Requests Dashboard
         </a>
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
             <div>
@@ -46,14 +46,14 @@
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i>@TempData["SuccessMessage"]
+            @TempData["SuccessMessage"]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["ErrorMessage"]
+            @TempData["ErrorMessage"]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
@@ -64,7 +64,7 @@
             <!-- Ticket Description -->
             <div class="card border-0 shadow-sm rounded-3 mb-4">
                 <div class="card-header bg-white py-3 font-weight-bold">
-                    <i class="bi bi-file-text me-2 text-primary"></i>Request Description
+                    Request Description
                 </div>
                 <div class="card-body">
                     <p class="mb-0 text-dark style-whitespace-pre">@Model.Description</p>
@@ -76,7 +76,7 @@
             {
                 <div class="card border-0 shadow-sm rounded-3 mb-4 bg-light">
                     <div class="card-body p-3">
-                        <h6 class="font-weight-bold mb-3"><i class="bi bi-gear-fill me-2 text-primary"></i>Workflow & Action Controls</h6>
+                        <h6 class="font-weight-bold mb-3">Workflow & Action Controls</h6>
                         
                         <form asp-action="UpdateStatus" method="post" class="row g-2 align-items-center mb-3">
                             <input type="hidden" name="id" value="@Model.Id" />
@@ -93,7 +93,7 @@
                                 <input type="text" name="reason" class="form-control" placeholder="Reason / transition note..." />
                             </div>
                             <div class="col-md-3 d-grid">
-                                <button type="submit" class="btn btn-primary"><i class="bi bi-check2-circle me-1"></i> Update Status</button>
+                                <button type="submit" class="btn btn-primary">Update Status</button>
                             </div>
                         </form>
 
@@ -105,7 +105,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3 d-grid">
-                                <button type="submit" class="btn btn-outline-dark"><i class="bi bi-person-plus-fill me-1"></i> Assign</button>
+                                <button type="submit" class="btn btn-outline-dark">Assign</button>
                             </div>
                         </form>
                     </div>
@@ -115,7 +115,7 @@
             <!-- Comments Timeline -->
             <div class="card border-0 shadow-sm rounded-3">
                 <div class="card-header bg-white py-3 font-weight-bold d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-chat-left-dots me-2 text-primary"></i>Activity & Discussion Thread</span>
+                    <span>Activity & Discussion Thread</span>
                     <span class="badge bg-secondary">@Model.Comments.Count Comments</span>
                 </div>
                 <div class="card-body p-4">
@@ -131,7 +131,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="isInternal" value="true" id="isInternalCheck">
                                     <label class="form-check-label text-muted small" for="isInternalCheck">
-                                        <i class="bi bi-lock-fill me-1"></i>Internal Note (Visible to staff only)
+                                        Internal Note (Visible to staff only)
                                     </label>
                                 </div>
                             }
@@ -139,7 +139,7 @@
                             {
                                 <div></div>
                             }
-                            <button type="submit" class="btn btn-primary btn-sm px-3"><i class="bi bi-send me-1"></i> Post Comment</button>
+                            <button type="submit" class="btn btn-primary btn-sm px-3">Post Comment</button>
                         </div>
                     </form>
 
@@ -149,7 +149,7 @@
                     @if (!Model.Comments.Any())
                     {
                         <div class="text-center py-4 text-muted">
-                            <i class="bi bi-chat-square-dots fs-2 d-block mb-1"></i> No comments yet.
+                            No comments yet.
                         </div>
                     }
                     else
@@ -160,13 +160,13 @@
                                 <div class="card mb-3 border-0 bg-light rounded-3">
                                     <div class="card-body p-3">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span class="fw-bold"><i class="bi bi-person-circle me-1"></i>@comment.AuthorName</span>
+                                            <span class="fw-bold">@comment.AuthorName</span>
                                             <small class="text-muted">@comment.CreatedDate.ToString("yyyy-MM-dd HH:mm")</small>
                                         </div>
                                         <p class="mb-0 text-dark">@comment.Body</p>
                                         @if (comment.IsInternal)
                                         {
-                                            <small class="badge bg-warning text-dark mt-2"><i class="bi bi-eye-slash-fill me-1"></i>Internal Note</small>
+                                            <small class="badge bg-warning text-dark mt-2">Internal Note</small>
                                         }
                                     </div>
                                 </div>
@@ -182,7 +182,7 @@
             <!-- Ticket Info Card -->
             <div class="card border-0 shadow-sm rounded-3 mb-4">
                 <div class="card-header bg-white py-3 font-weight-bold">
-                    <i class="bi bi-info-circle me-2 text-primary"></i>Request Information
+                    Request Information
                 </div>
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush">
@@ -233,7 +233,7 @@
             <!-- SLA Deadlines Card -->
             <div class="card border-0 shadow-sm rounded-3">
                 <div class="card-header bg-white py-3 font-weight-bold">
-                    <i class="bi bi-clock-history me-2 text-primary"></i>SLA Deadlines & Compliance
+                    SLA Deadlines & Compliance
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
@@ -243,7 +243,7 @@
                         </div>
                         @if (Model.IsResponseSlaBreached)
                         {
-                            <span class="badge bg-danger mt-1"><i class="bi bi-exclamation-octagon me-1"></i>Response SLA Breached</span>
+                            <span class="badge bg-danger mt-1">Response SLA Breached</span>
                         }
                     </div>
 
@@ -256,7 +256,7 @@
                         </div>
                         @if (Model.IsResolutionSlaBreached)
                         {
-                            <span class="badge bg-danger mt-1"><i class="bi bi-exclamation-octagon me-1"></i>Resolution SLA Breached</span>
+                            <span class="badge bg-danger mt-1">Resolution SLA Breached</span>
                         }
                     </div>
                 </div>
